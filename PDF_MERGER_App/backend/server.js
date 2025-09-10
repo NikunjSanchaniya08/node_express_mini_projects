@@ -41,7 +41,6 @@ app.post("/merge", upload.array("pdfs", 2), async (req, res) => {
     res.setHeader("Content-Disposition", "attachment; filename=merged.pdf");
     const mergedPdfBuffer = await merger.saveAsBuffer();
     res.send(Buffer.from(mergedPdfBuffer));
-    console.log(mergedPdfBuffer);
   } catch (err) {
     res.status(500).send(err.message);
   }
