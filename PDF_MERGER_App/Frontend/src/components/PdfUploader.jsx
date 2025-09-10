@@ -44,9 +44,13 @@ const PdfUploader = () => {
 
     setSelectedFiles(files);
   };
-  const resetField=(e)=>{
-    
-  }
+  const resetField = (e) => {
+    setSelectedFiles(null);
+    setMergedPdfUrl(null);
+    setShowModal(false);
+    // Reset file input
+    document.querySelector('input[type="file"]').value = "";
+  };
 
   return (
     <>
@@ -94,7 +98,12 @@ const PdfUploader = () => {
                     >
                       Merge & Download
                     </button>
-                    <button className="btn btn-secondary btn-lg" onClick={resetField}>Reset</button>
+                    <button
+                      className="btn btn-secondary btn-lg"
+                      onClick={resetField}
+                    >
+                      Reset
+                    </button>
                   </div>
 
                   {/* Placeholder for download link */}
