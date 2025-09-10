@@ -3,7 +3,11 @@ const app = express();
 const port = 3000;
 const PDFMerger = require("pdf-merger-js").default;
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" }); // uploaded PDFs will be stored in /uploads
+// const upload = multer({ dest: "uploads/" }); // uploaded PDFs will be stored in /uploads
+const cors = require("cors");
+app.use(cors());
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 app.get("/", (req, res) => {
   res.send("hello");
@@ -23,15 +27,21 @@ app.get("/", (req, res) => {
 // })();
 // });
 
-// -------------- upload PDF from Storage -------------------
+// -------------- upload PDF from Frontend -------------------
 app.post("/merge", upload.array("pdfs", 2), async (req, res) => {
   try {
     const merger = new PDFMerger();
-    for (const file of req.files) {
-      await merger.add(file.path);
+    for (let file of req.files) {
+      await merger.add(new Uint8Array(file.buffer));
+      //// add PDFs directly from memory
     }
-    await merger.save("merged.pdf");
-    res.send("PDFs merged successfully!");
+    // await merger.save("merged.pdf");
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", "attachment; filename=merged.pdf");
+    const mergedPdfBuffer = await merger.saveAsBuffer();
+    res.send(Buffer.from(mergedPdfBuffer));
+    console.log(mergedPdfBuffer);
   } catch (err) {
     res.status(500).send(err.message);
   }
