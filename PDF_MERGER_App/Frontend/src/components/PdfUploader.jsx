@@ -16,7 +16,7 @@ const PdfUploader = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/merge", {
+      const res = await fetch("http://localhost:3000/merge", {
         method: "POST",
         body: formData,
       });
@@ -25,6 +25,7 @@ const PdfUploader = () => {
       const url = URL.createObjectURL(blob);
       setMergedPdfUrl(url);
       setShowModal(true); // show modal after merge
+      // console.log(blob);
     } catch (err) {
       console.error(err);
       alert("Error merging PDFs");
@@ -43,6 +44,10 @@ const PdfUploader = () => {
 
     setSelectedFiles(files);
   };
+  const resetField=(e)=>{
+    
+  }
+
   return (
     <>
       <div
@@ -67,7 +72,7 @@ const PdfUploader = () => {
                   <div className="mb-3">
                     <input
                       type="file"
-                      className="form-control"
+                      className="form-control mb-3"
                       multiple
                       accept="application/pdf"
                       onChange={handleFileChange}
@@ -83,10 +88,13 @@ const PdfUploader = () => {
 
                   {/* Buttons */}
                   <div className="d-grid gap-2">
-                    <button className="btn btn-primary btn-lg">
-                      Upload & Merge
+                    <button
+                      className="btn btn-primary btn-lg"
+                      onClick={handleUpload}
+                    >
+                      Merge & Download
                     </button>
-                    <button className="btn btn-secondary btn-lg">Reset</button>
+                    <button className="btn btn-secondary btn-lg" onClick={resetField}>Reset</button>
                   </div>
 
                   {/* Placeholder for download link */}
